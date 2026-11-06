@@ -1,6 +1,13 @@
 # MuscleMetria Privacy Policy
 
-**Last updated: 2026-11-05**
+**Last updated: 2026-11-06**
+
+Version note: The locale-only startup and separate label-scan AI choice are
+introduced in 3.1.110 (build 281). Until you install the released update, some
+older versions may request location after login to set initial units, and may
+automatically review uncertain nutrition labels when AI is enabled and eligible.
+The separate-choice descriptions below apply to clients with the new controls;
+this policy date alone does not update an installed client.
 
 ## Data Collection
 
@@ -25,9 +32,51 @@ MuscleMetria stores the following data to provide its services:
   optional progress data includes body measurements, progress photos and
   form-check photos/videos; location-derived region hints are separate from
   health data. We do not read workout GPS routes or ECG waveforms in this flow.
-- **Optional AI inputs**: structured feature inputs, source text, health/body context, and photos you choose to submit for AI recognition or plan generation
+- **Optional AI inputs**: structured feature inputs, source text, permitted
+  health/body context, and photos you choose to submit for AI recognition or
+  plan generation. Nutrition-label scanning starts with on-device OCR. If an
+  AI review is offered, a separate choice for that scan explains that its photo
+  and recognized text will go through Cloudflare to Volcengine Ark / Doubao.
+  Keeping the local result or dismissing the choice does not send that scan
+  to the AI provider. AI availability alone is not consent for that scan.
 
 All fitness and nutrition data is stored **locally on your device** by default.
+
+## Region and Location
+
+- At App startup, the system locale can initialize the region used for unit
+  defaults. This does not request device location; existing region and custom
+  unit preferences are preserved.
+- In the App profile editor, choosing **Detect region** can request location
+  permission and a low-accuracy position, then use the platform's geocoding
+  provider to obtain a country/region. The provider may process the coordinates
+  under its own platform terms. This flow does not track background location
+  or store/upload the raw coordinates to MuscleMetria's backend.
+- The country code saved with your unit preferences can sync to Supabase when
+  signed in and may be included in training or nutrition AI requests you start.
+  The region text you enter or detect in your profile is saved on your device.
+  It can help select display units and may be sent when you request regional
+  food suggestions or an AI nutrition plan. You can change the region manually.
+- Coach Web can request browser location permission on opening to calculate
+  local sunrise/sunset for its appearance. That calculation uses coordinates
+  in the browser; this flow does not upload them to MuscleMetria's backend.
+  If location is unavailable or denied, the Web app uses its time-based
+  appearance fallback. Browser/platform location services have their own
+  permission and processing rules.
+
+## Photos, Camera, and Documents
+
+You can choose the camera, selected photos or documents to scan barcodes or
+nutrition labels, recognize food/equipment/plans, or submit progress and
+form-check media. When a barcode is looked up online, the product code is sent
+to Open Food Facts; this does not require sending a label photo to the AI
+provider. Nutrition-label OCR runs locally first; its optional third-party AI review requires the scan
+choice described above. Other AI-labelled recognition or plan features send
+the inputs you choose for that task. When you submit a progress photo while
+signed in, the App uploads it to private Supabase storage. A connected,
+authorized coach can view only photos marked for coach sharing. Form-check
+media is shared with the coach you submit it to. Choosing a private progress
+photo does not mean the photo is stored only on your device.
 
 ## Health Choices and Purpose
 
@@ -79,6 +128,10 @@ only when database RLS allows that coach to see the referenced row.
 
 ## Data Export & Deletion
 
+- You can find data export and account deletion in Settings. You can also
+  delete supported individual records, plans and media within their editors.
+  Public help explains [account deletion](https://zuoyangjkpi.github.io/MuscleMetria-releases/delete-account)
+  and [requests to delete specific data](https://zuoyangjkpi.github.io/MuscleMetria-releases/delete-data).
 - Cloud export is requested through the backend-owned `export_my_data()` RPC,
   with `export_user_data` reserved as an optional Edge Function wrapper. The
   mobile app must not assemble a partial hard-coded export locally.
@@ -117,6 +170,8 @@ MuscleMetria uses the following third-party services:
 - **Volcengine Ark / Doubao** (optional AI generation and photo recognition)
 - **SMTP2GO configured in Supabase Auth** (account email delivery)
 - **Apple App Store / Google Play** (subscription payment platforms)
+- **Device/browser location and geocoding services** (optional region detection
+  and Coach Web sunrise/sunset appearance, as described above)
 
 AI features are optional and require backend authorization and available quota.
 When you use AI, your selected inputs are sent through Cloudflare Worker to
@@ -125,6 +180,12 @@ context is part of those inputs only as described above. External food database
 queries are rate-limited and cached only in a privacy-preserving way. Vendor
 health SDKs/OAuth sources require separate approval, consent and disclosure;
 prepared or disabled adapters do not mean those services are connected.
+
+For a nutrition-label AI review, the selected photo and its recognized OCR text
+are AI inputs only after the separate scan choice. You can retain and edit the
+local result instead. A reviewed result may still retain more trustworthy local
+values; displaying local values does not mean no AI request was made if you
+chose to send the scan for review.
 
 ## Contact
 
