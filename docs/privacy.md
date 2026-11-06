@@ -6,8 +6,10 @@ Version note: The locale-only startup and separate label-scan AI choice are
 introduced in 3.1.110 (build 281). Until you install the released update, some
 older versions may request location after login to set initial units, and may
 automatically review uncertain nutrition labels when AI is enabled and eligible.
-The separate-choice descriptions below apply to clients with the new controls;
-this policy date alone does not update an installed client.
+Clients with the health-connection flow explain reading, AI assistance and
+coach sharing in one initial connection choice. Earlier clients may present
+separate category controls. System permissions still determine which records
+can be read; this policy date alone does not update an installed client.
 
 ## Data Collection
 
@@ -23,7 +25,8 @@ MuscleMetria stores the following data to provide its services:
   support, renewals, refunds, and revocations
 - **Coach-client data**: invite codes, plan/diet-plan assignments, planned-vs-actual execution snapshots, check-ins, form checks, coach notes, tags, and enhanced athlete records
 - **Health and progress data**: optional Apple Health / Health Connect records
-  from the categories you select: basic activity/body measurements and energy,
+  in the categories allowed by your system permissions and connection consent:
+  basic activity/body measurements and energy,
   workouts/distance/speed, body composition/metabolism, sleep, heart/recovery,
   nutrition/hydration, other health measurements (such as blood pressure,
   glucose, oxygen saturation or temperature), and optional menstrual flow.
@@ -80,29 +83,34 @@ photo does not mean the photo is stored only on your device.
 
 ## Health Choices and Purpose
 
-- Reading health records, using categories in AI suggestions, and sharing them
-  with a connected coach are separate choices. Additional categories start off.
+- Before connecting health data, the connection flow explains reading records,
+  their use in AI fitness/diet suggestions, and sharing with a connected coach.
+  After you agree and grant system access, supported categories are enabled for
+  these purposes together, subject to actual system permissions and records.
+  Older saved category choices are retained until you explicitly connect again.
   System permissions remain under your control in Apple Health / Health Connect.
 - We read a bounded recent window (up to 30 days; shorter for frequent samples).
   Unavailable or denied data remains unknown. We do not infer that missing data
   is zero, or combine overlapping devices as extra activity.
-- AI health context is sent only when you choose to use AI with health data,
-  for the categories permitted for that purpose. Activity/nutrition choices may
+- After connection consent, AI health context is sent only when you actually
+  use AI with permitted health context, within the purposes you authorized. This may
   also include recent App training execution and food-log summaries. The input
   distinguishes observed records, estimates, plans and actual logs.
-- When signed in, selected coach-sharing categories and sharing preferences may
-  be uploaded to Supabase so an approved, connected coach can follow them.
-  Other optional health categories are not uploaded merely because they can be
-  read locally. The coach Web app does not directly read your device health store.
+- When signed in, the connection consent also permits health categories and
+  sharing preferences to sync to Supabase for an approved, connected coach.
+  System read permission alone is not this purpose consent. The coach Web app
+  does not directly read your device health store.
 - We do not sell health data or use it for advertising or marketing. Health data
   and AI suggestions are not intended for diagnosis, treatment, emergencies or
   real-time medical monitoring.
-- Turning off reading stops future reads through this flow; disabling AI use
-  stops future AI submissions of that category. Changing coach access needs a
-  network connection to take effect on the server. It does not withdraw data
-  already viewed by a coach or already processed for a prior request. Existing
-  local/cloud records are not automatically claimed deleted when a switch is
-  changed; export and verified account deletion remain available below.
+- You can disconnect health data from the health page's more menu to stop
+  future reads and health-data use for AI and coach sharing through this flow.
+  Earlier versions may provide individual category controls instead. System
+  permission controls remain available in Apple Health or Health Connect.
+  Changing coach access needs a network connection to take effect on the
+  server. It does not withdraw data already viewed by a coach or processed for
+  a prior AI request. Disconnecting does not delete historical local/cloud
+  records; export and verified account deletion remain available below.
 
 ## Cloud Sync
 
@@ -124,7 +132,8 @@ only when database RLS allows that coach to see the referenced row.
   body measurements, notes/tags they create, and enhanced athlete records they
   create for that coaching relationship. Server policies enforce health
   category access as well as the active relationship.
-- You can revoke coach access at any time
+- You can disconnect health sharing or end a coaching relationship at any time;
+  server changes require a network connection.
 
 ## Data Export & Deletion
 
